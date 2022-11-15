@@ -39,18 +39,31 @@ public class FriendsCommands implements CommandExecutor {
         HashMap<UUID, List<UUID>> friends = this.friendsManager.getFriendsList();
         if (args[0].equalsIgnoreCase("add")) {
             boolean isFriends = false;
-            if (((List)friends.get(player.getUniqueId())).size() >= 1)
+            boolean hasAlreadySentRequest = false;
+            if (friends.get(player.getUniqueId()).size() >= 1) {
                 for (UUID f : friends.get(player.getUniqueId())) {
                     if (f == target.getUniqueId()) {
                         isFriends = true;
                         break;
                     }
                 }
-            if (!isFriends) {
+            }
+            List<FriendRequest> fr = this.friendsManager.getFriendRequests();
+            for (FriendRequest request : fr) {
+                if (request.getName().equalsIgnoreCase(target.getName())) {
+                    hasAlreadySentRequest = true;
+                    break;
+                }
+            }
+            if (!isFriends && !hasAlreadySentRequest) {
                 FriendRequest request = new FriendRequest(target.getUniqueId(), player.getUniqueId());
                 List<FriendRequest> f = this.friendsManager.getFriendRequests();
                 f.add(request);
                 this.friendsManager.setFriendRequests(f);
+                return true;
+            } else if (hasAlreadySentRequest) {
+                player.sendMessage(ChatColor.RED + "You've already sent a friend request to that player.");
+                return true;
             } else {
                 player.sendMessage(ChatColor.RED + "That player is already on your friends list.");
                 return true;
@@ -66,16 +79,26 @@ public class FriendsCommands implements CommandExecutor {
             }
             if (hasFriendRequest) {
                 HashMap<UUID, List<UUID>> map = this.friendsManager.getFriendsList();
-                List<UUID> friendsList = map.get(player.getUniqueId());
-                if (friendsList == null)
-                    friendsList = new ArrayList<>();
-                friendsList.add(target.getUniqueId());
+                //add the target as a friend of the player
+                List<UUID> playerFriendsList = map.get(player.getUniqueId());
+                if (playerFriendsList == null)
+                    playerFriendsList = new ArrayList<>();
+                playerFriendsList.add(target.getUniqueId());
+                map.put(player.getUniqueId(), playerFriendsList);
+                //add the player as a friend of the target
+                List<UUID> targetFriendsList = map.get(target.getUniqueId());
+                if (targetFriendsList == null)
+                    targetFriendsList = new ArrayList<>();
+                targetFriendsList.add(target.getUniqueId());
+                map.put(target.getUniqueId(), targetFriendsList);
                 this.friendsManager.setFriendsList(map);
+
                 player.sendMessage(ChatColor.LIGHT_PURPLE + "You are now friends with " + ChatColor.YELLOW + target.getName());
                 target.sendMessage(ChatColor.LIGHT_PURPLE + "You are now friends with " + ChatColor.YELLOW + player.getName());
             } else {
-                player.sendMessage(ChatColor.RED + "Looks like you don't have that person as a friend, try checking your spelling and try again.");
+                player.sendMessage(ChatColor.RED + "Looks like you don't a friend request from that player, try checking your spelling and try again.");
             }
+            return true;
         } else if (args[0].equalsIgnoreCase("remove")) {
             boolean hasFriend = false;
             List<UUID> f = (List<UUID>)this.friendsManager.getFriendsList().get(player);
@@ -87,21 +110,38 @@ public class FriendsCommands implements CommandExecutor {
             }
             if (hasFriend) {
                 HashMap<UUID, List<UUID>> map = this.friendsManager.getFriendsList();
+                //removing the target from the friends list
                 List<UUID> friendsList = map.get(player.getUniqueId());
                 if (friendsList == null)
                     friendsList = new ArrayList<>();
                 friendsList.remove(target.getUniqueId());
+                map.put(player.getUniqueId(), friendsList);
+                //removing the player from the targets list
+                List<UUID> targetFriendsList = map.get(target.getUniqueId());
+                if (targetFriendsList == null)
+                    targetFriendsList = new ArrayList<>();
+                targetFriendsList.remove(player.getUniqueId());
+                map.put(target.getUniqueId(), targetFriendsList);
                 this.friendsManager.setFriendsList(map);
                 player.sendMessage(ChatColor.LIGHT_PURPLE + "You are no longer friends with " + ChatColor.YELLOW + target.getName());
                 target.sendMessage(ChatColor.LIGHT_PURPLE + "You are no longer friends with " + ChatColor.YELLOW + player.getName());
             } else {
                 player.sendMessage(ChatColor.RED + "Looks like you don't have a friends request from that player, try checking your spelling and try again.");
             }
+            return true;
         } else {
-            List<UUID> f = (List<UUID>)this.friendsManager.getFriendsList().get(player);
-            for (UUID friend : f)
-                player.sendMessage(Bukkit.getPlayer(friend).getName());
+            List<UUID> f = this.friendsManager.getFriendsList().get(player);
+            if (f.size() < 1) {
+                player.sendMessage(ChatColor.RED + "FRIENDS >> You don't have any friends yet.");
+            } else {
+                player.sendMessage("");
+                player.sendMessage(ChatColor.LIGHT_PURPLE + "----------------------------------------------");
+                for (UUID friend : f)
+                    player.sendMessage(ChatColor.YELLOW + Bukkit.getPlayer(friend).getName());
+                player.sendMessage(ChatColor.LIGHT_PURPLE + "----------------------------------------------");
+                player.sendMessage("");
+            }
+            return true;
         }
-        return true;
     }
 }

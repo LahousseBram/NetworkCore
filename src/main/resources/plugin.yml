@@ -1,0 +1,8 @@
+name: NetworkCore
+version: '1.0-SNAPSHOT'
+main: me.cosmic.NetworkCore
+authors: [ etuu ]
+commands:
+  friend:
+    aliases:
+      - f

@@ -40,6 +40,7 @@ public class FriendsCommands implements CommandExecutor {
         if (args[0].equalsIgnoreCase("add")) {
             boolean isFriends = false;
             boolean hasAlreadySentRequest = false;
+            //check if they're already friends
             if (friends.get(player.getUniqueId()).size() >= 1) {
                 for (UUID f : friends.get(player.getUniqueId())) {
                     if (f == target.getUniqueId()) {
@@ -89,7 +90,7 @@ public class FriendsCommands implements CommandExecutor {
                 List<UUID> targetFriendsList = map.get(target.getUniqueId());
                 if (targetFriendsList == null)
                     targetFriendsList = new ArrayList<>();
-                targetFriendsList.add(target.getUniqueId());
+                targetFriendsList.add(player.getUniqueId());
                 map.put(target.getUniqueId(), targetFriendsList);
                 this.friendsManager.setFriendsList(map);
 

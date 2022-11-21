@@ -102,7 +102,7 @@ public class FriendsCommands implements CommandExecutor {
             return true;
         } else if (args[0].equalsIgnoreCase("remove")) {
             boolean hasFriend = false;
-            List<UUID> f = (List<UUID>)this.friendsManager.getFriendsList().get(player);
+            List<UUID> f = this.friendsManager.getFriendsList().get(player);
             for (UUID friend : f) {
                 if (Bukkit.getPlayer(friend).getName().equalsIgnoreCase(target.getName())) {
                     hasFriend = true;
@@ -129,6 +129,17 @@ public class FriendsCommands implements CommandExecutor {
             } else {
                 player.sendMessage(ChatColor.RED + "Looks like you don't have a friends request from that player, try checking your spelling and try again.");
             }
+            return true;
+        } else if (args[0].equalsIgnoreCase("help")) {
+            player.sendMessage(ChatColor.LIGHT_PURPLE + "FRIENDS >> Help Menu");
+            player.sendMessage(ChatColor.DARK_GRAY + "-----------------------------------");
+            player.sendMessage(ChatColor.YELLOW + "/f add [player]" + ChatColor.WHITE + ": Send a friend request to a player");
+            player.sendMessage(ChatColor.YELLOW + "/f remove [player]" + ChatColor.WHITE + ": Remove a player from your friends list");
+            player.sendMessage(ChatColor.YELLOW + "/f accept [player]" + ChatColor.WHITE + ": Accept a friend request from a player. Note: requires friend request from that player");
+            player.sendMessage(ChatColor.YELLOW + "/f " + ChatColor.WHITE + ": Show your friend list");
+            player.sendMessage(ChatColor.YELLOW + "/f help" + ChatColor.WHITE + ": Display this help menu");
+            player.sendMessage(ChatColor.DARK_GRAY + "-----------------------------------");
+
             return true;
         } else {
             List<UUID> f = this.friendsManager.getFriendsList().get(player);

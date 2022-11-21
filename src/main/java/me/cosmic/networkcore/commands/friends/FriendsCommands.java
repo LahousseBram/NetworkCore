@@ -16,6 +16,14 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 public class FriendsCommands implements CommandExecutor {
+
+    //TODO
+    // - /f command still gives internal error: ERROR: Caused by: java.lang.ArrayIndexOutOfBoundsException: 1
+    //        at me.cosmic.networkcore.commands.friends.FriendsCommands.onCommand(FriendsCommands.java:36)
+    // - I can still send f requests from player if target has already accepted. Friend request from target to player after target has accepted player request.
+    // - I can send friend requests to myself
+    // That should be mostly it... More testing required.
+
     private NetworkCore networkcore;
 
     private FriendsManager friendsManager;

@@ -155,10 +155,11 @@ public class FriendsCommands implements CommandExecutor {
                 player.sendMessage(ChatColor.RED + "FRIENDS >> You don't have any friends yet.");
             } else {
                 player.sendMessage("");
-                player.sendMessage(ChatColor.LIGHT_PURPLE + "----------------------------------------------");
+                player.sendMessage(ChatColor.LIGHT_PURPLE + "FRIENDS >> Your friends list:");
+                player.sendMessage(ChatColor.DARK_GRAY + "----------------------------------------------");
                 for (UUID friend : f)
                     player.sendMessage(ChatColor.YELLOW + Bukkit.getPlayer(friend).getName());
-                player.sendMessage(ChatColor.LIGHT_PURPLE + "----------------------------------------------");
+                player.sendMessage(ChatColor.DARK_GRAY + "----------------------------------------------");
                 player.sendMessage("");
             }
             return true;

@@ -4,8 +4,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
+import java.util.logging.Level;
 
 import me.cosmic.networkcore.NetworkCore;
+import me.cosmic.networkcore.sql.Players;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -25,6 +27,12 @@ public class InitializeFriendsOnPlayerJoin implements Listener {
             HashMap<UUID, List<UUID>> friendsList = this.nc.getFriendsManager().getFriendsList();
             friendsList.put(event.getPlayer().getUniqueId(), new ArrayList<>());
             this.nc.getFriendsManager().setFriendsList(friendsList);
+        }
+
+        Players pl = new Players(nc);
+        if (nc.mySQL.isConnected() && !pl.exists(event.getPlayer())) {
+            Bukkit.getLogger().log(Level.FINE, "Player added");
+            pl.createPlayer(event.getPlayer());
         }
     }
 }

@@ -151,7 +151,7 @@ public class FriendsCommands implements CommandExecutor {
                     player.sendMessage(ChatColor.RED + "That player either doesn't exist or isn't online at the moment. Please try again and check your spelling.");
                     return true;
                 }
-
+                /*
                 if (target.getUniqueId() == player.getUniqueId()) return true;
                 boolean hasFriend = false;
                 List<UUID> f = this.friendsManager.getFriendsList().get(player.getUniqueId());
@@ -161,7 +161,9 @@ public class FriendsCommands implements CommandExecutor {
                         break;
                     }
                 }
-                if (hasFriend) {
+                 */
+                if (this.pl.areTheyFriends(player, target)) {
+                    /*
                     HashMap<UUID, List<UUID>> map = this.friendsManager.getFriendsList();
                     //removing the target from the friends list
                     List<UUID> friendsList = map.get(player.getUniqueId());
@@ -176,6 +178,8 @@ public class FriendsCommands implements CommandExecutor {
                     targetFriendsList.remove(player.getUniqueId());
                     map.put(target.getUniqueId(), targetFriendsList);
                     this.friendsManager.setFriendsList(map);
+                    */
+                    this.pl.deleteFriends(player, target);
                     player.sendMessage(ChatColor.LIGHT_PURPLE + "You are no longer friends with " + ChatColor.YELLOW + target.getName());
                     target.sendMessage(ChatColor.LIGHT_PURPLE + "You are no longer friends with " + ChatColor.YELLOW + player.getName());
                 } else {

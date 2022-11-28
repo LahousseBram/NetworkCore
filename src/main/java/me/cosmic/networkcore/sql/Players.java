@@ -8,6 +8,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
@@ -37,7 +38,7 @@ public class Players {
             ps.setString(1, uuid.toString());
             ps.setString(2, secondPlayer.getUniqueId().toString());
             int resultSet = ps.executeUpdate();
-            PreparedStatement ps1 = this.networkCore.mySQL.getConnection().prepareStatement("insert into players(UUID) values(?)");
+            PreparedStatement ps1 = this.networkCore.mySQL.getConnection().prepareStatement("insert into friends(Player, FriendsWith) values(?, ?)");
             ps1.setString(1, secondPlayer.getUniqueId().toString());
             ps1.setString(2, uuid.toString());
             int resultSet1 = ps1.executeUpdate();
@@ -137,7 +138,24 @@ public class Players {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        Bukkit.broadcastMessage(Arrays.toString(names.toArray()));
         return names;
+    }
+
+    public void deleteFriends(Player player, Player target) {
+        try {
+            UUID uuid = player.getUniqueId();
+            PreparedStatement ps = this.networkCore.mySQL.getConnection().prepareStatement("delete from friends where Player=? and FriendsWith=?");
+            ps.setString(1, uuid.toString());
+            ps.setString(2, target.getUniqueId().toString());
+            int resultSet = ps.executeUpdate();
+            PreparedStatement ps2 = this.networkCore.mySQL.getConnection().prepareStatement("delete from friends where Player=? and FriendsWith=?");
+            ps2.setString(1, target.getUniqueId().toString());
+            ps2.setString(2, uuid.toString());
+            int resultSet2 = ps2.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
 }

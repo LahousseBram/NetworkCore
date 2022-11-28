@@ -23,8 +23,9 @@ public class Players {
     public void createPlayer(Player player) {
         try {
             UUID uuid = player.getUniqueId();
-            PreparedStatement ps = this.networkCore.mySQL.getConnection().prepareStatement("insert into players(UUID) values(?)");
+            PreparedStatement ps = this.networkCore.mySQL.getConnection().prepareStatement("insert into players(UUID, PartyID) values(?, ?)");
             ps.setString(1, uuid.toString());
+            ps.setInt(2, -1);
             int resultSet = ps.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();

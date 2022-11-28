@@ -31,7 +31,7 @@ public class InitializeFriendsOnPlayerJoin implements Listener {
 
         Players pl = new Players(nc);
         if (nc.mySQL.isConnected() && !pl.exists(event.getPlayer())) {
-            Bukkit.getLogger().log(Level.FINE, "Player added");
+            Bukkit.getLogger().log(Level.INFO, "NetworkCore >> New player added to the database!");
             pl.createPlayer(event.getPlayer());
         }
     }

@@ -1,11 +1,13 @@
 package me.cosmic.networkcore;
 
 import me.cosmic.networkcore.commands.database.DatabaseCommands;
+import me.cosmic.networkcore.commands.party.PartyCommands;
 import me.cosmic.networkcore.listeners.friends.InitializeFriendsOnPlayerJoin;
 import me.cosmic.networkcore.commands.friends.FriendsCommands;
 import me.cosmic.networkcore.managers.FriendsManager;
 import me.cosmic.networkcore.managers.PartyManager;
 import me.cosmic.networkcore.sql.MySQL;
+import me.cosmic.networkcore.sql.Parties;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -32,11 +34,14 @@ public final class NetworkCore extends JavaPlugin {
         if (mySQL.isConnected()) Bukkit.getLogger().info(ChatColor.GREEN + "NetworkCore >> Successfully connected to the database.");
 
         getCommand("friend").setExecutor(new FriendsCommands(this));
+        getCommand("party").setExecutor(new PartyCommands(this));
         getCommand("executequery").setExecutor(new DatabaseCommands(this));
         getServer().getPluginManager().registerEvents(new InitializeFriendsOnPlayerJoin(this), this);
     }
 
     public void onDisable() {
+        new Parties(this).removeAllPlayersFromParties();
+
         mySQL.disconnect();
 
         if (!mySQL.isConnected()) Bukkit.getLogger().info(ChatColor.GREEN + "NetworkCore >> Successfully disconnected the database.");

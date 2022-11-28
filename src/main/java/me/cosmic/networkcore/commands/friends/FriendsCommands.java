@@ -1,6 +1,5 @@
 package me.cosmic.networkcore.commands.friends;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
@@ -8,7 +7,6 @@ import java.util.UUID;
 import me.cosmic.networkcore.NetworkCore;
 import me.cosmic.networkcore.managers.FriendsManager;
 import me.cosmic.networkcore.sql.Players;
-import me.cosmic.networkcore.systems.FriendRequest;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -19,11 +17,7 @@ import org.bukkit.entity.Player;
 public class FriendsCommands implements CommandExecutor {
 
     //TODO
-    // - /f command still gives internal error: ERROR: Caused by: java.lang.ArrayIndexOutOfBoundsException: 1
-    //        at me.cosmic.networkcore.commands.friends.FriendsCommands.onCommand(FriendsCommands.java:36)
-    // - I can still send f requests from player if target has already accepted. Friend request from target to player after target has accepted player request.
-    // - I can send friend requests to myself
-    // That should be mostly it... More testing required.
+    // - Make sure that the plugin doesn't throw an error when the target isn't online.
 
     private NetworkCore networkcore;
 

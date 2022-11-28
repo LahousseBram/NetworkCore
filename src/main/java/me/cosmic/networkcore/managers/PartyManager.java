@@ -9,7 +9,7 @@ import me.cosmic.networkcore.systems.PartyInvite;
 public class PartyManager {
     private List<Party> parties = new ArrayList<>();
 
-    private List<PartyInvite> invites;
+    private List<PartyInvite> invites = new ArrayList<>();
 
     public List<Party> getParties() {
         return this.parties;

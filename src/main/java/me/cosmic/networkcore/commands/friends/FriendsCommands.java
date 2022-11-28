@@ -50,35 +50,7 @@ public class FriendsCommands implements CommandExecutor {
                     player.sendMessage(ChatColor.RED + "That player either doesn't exist or isn't online at the moment. Please try again and check your spelling.");
                     return true;
                 }
-                /*
-                if (target.getUniqueId() == player.getUniqueId()) return true;
-                boolean isFriends = false;
-                boolean hasAlreadySentRequest = false;
-                //check if they're already friends
-                if (friends.get(player.getUniqueId()).size() >= 1) {
-                    for (UUID f : friends.get(player.getUniqueId())) {
-                        if (f == target.getUniqueId()) {
-                            isFriends = true;
-                            break;
-                        }
-                    }
-                }
-                List<FriendRequest> fr = this.friendsManager.getFriendRequests();
-                for (FriendRequest request : fr) {
-                    if (request.getTarget() == target.getUniqueId() && request .getOrigin() == player.getUniqueId()) {
-                        hasAlreadySentRequest = true;
-                        break;
-                    }
-                }
-                */
                 if (!pl.areTheyFriends(player, target) && !pl.existsFriendRequest(player, target)) {
-                    /*
-                    FriendRequest request = new FriendRequest(target.getUniqueId(), player.getUniqueId());
-                    List<FriendRequest> f = this.friendsManager.getFriendRequests();
-                    f.add(request);
-                    this.friendsManager.setFriendRequests(f);
-                    return true;
-                     */
 
                     pl.createFriendRequest(player, target);
 
@@ -106,33 +78,7 @@ public class FriendsCommands implements CommandExecutor {
                 }
 
                 if (target.getUniqueId() == player.getUniqueId()) return true;
-                /*boolean hasFriendRequest = false;
-                List<FriendRequest> f = this.friendsManager.getFriendRequests();
-                for (FriendRequest request : f) {
-                    if (request.getName().equalsIgnoreCase(target.getName())) {
-                        hasFriendRequest = true;
-                        f.remove(request);
-                        break;
-                    }
-                }
-                 */
                 if (pl.existsFriendRequest(player, target)) {
-                    /*
-                    HashMap<UUID, List<UUID>> map = this.friendsManager.getFriendsList();
-                    //add the target as a friend of the player
-                    List<UUID> playerFriendsList = map.get(player.getUniqueId());
-                    if (playerFriendsList == null)
-                        playerFriendsList = new ArrayList<>();
-                    playerFriendsList.add(target.getUniqueId());
-                    map.put(player.getUniqueId(), playerFriendsList);
-                    //add the player as a friend of the target
-                    List<UUID> targetFriendsList = map.get(target.getUniqueId());
-                    if (targetFriendsList == null)
-                        targetFriendsList = new ArrayList<>();
-                    targetFriendsList.add(player.getUniqueId());
-                    map.put(target.getUniqueId(), targetFriendsList);
-                    this.friendsManager.setFriendsList(map);
-                     */
 
                     pl.createFriends(player, target);
 
@@ -151,34 +97,7 @@ public class FriendsCommands implements CommandExecutor {
                     player.sendMessage(ChatColor.RED + "That player either doesn't exist or isn't online at the moment. Please try again and check your spelling.");
                     return true;
                 }
-                /*
-                if (target.getUniqueId() == player.getUniqueId()) return true;
-                boolean hasFriend = false;
-                List<UUID> f = this.friendsManager.getFriendsList().get(player.getUniqueId());
-                for (UUID friend : f) {
-                    if (Bukkit.getPlayer(friend).getName().equalsIgnoreCase(target.getName())) {
-                        hasFriend = true;
-                        break;
-                    }
-                }
-                 */
                 if (this.pl.areTheyFriends(player, target)) {
-                    /*
-                    HashMap<UUID, List<UUID>> map = this.friendsManager.getFriendsList();
-                    //removing the target from the friends list
-                    List<UUID> friendsList = map.get(player.getUniqueId());
-                    if (friendsList == null)
-                        friendsList = new ArrayList<>();
-                    friendsList.remove(target.getUniqueId());
-                    map.put(player.getUniqueId(), friendsList);
-                    //removing the player from the targets list
-                    List<UUID> targetFriendsList = map.get(target.getUniqueId());
-                    if (targetFriendsList == null)
-                        targetFriendsList = new ArrayList<>();
-                    targetFriendsList.remove(player.getUniqueId());
-                    map.put(target.getUniqueId(), targetFriendsList);
-                    this.friendsManager.setFriendsList(map);
-                    */
                     this.pl.deleteFriends(player, target);
                     player.sendMessage(ChatColor.LIGHT_PURPLE + "You are no longer friends with " + ChatColor.YELLOW + target.getName());
                     target.sendMessage(ChatColor.LIGHT_PURPLE + "You are no longer friends with " + ChatColor.YELLOW + player.getName());
@@ -198,9 +117,6 @@ public class FriendsCommands implements CommandExecutor {
 
                 return true;
             } else if (args[0].equalsIgnoreCase("list")) {
-                /*
-                List<UUID> f = this.friendsManager.getFriendsList().get(player.getUniqueId());
-                 */
                 List<String> f = this.pl.getFriends(player);
                 if (f.size() < 1) {
                     player.sendMessage(ChatColor.RED + "FRIENDS >> You don't have any friends yet.");
@@ -215,9 +131,6 @@ public class FriendsCommands implements CommandExecutor {
             }
 
         } else {
-            /*
-            List<UUID> f = this.friendsManager.getFriendsList().get(player.getUniqueId());
-             */
             List<String> f = this.pl.getFriends(player);
             if (f.size() < 1) {
                 player.sendMessage(ChatColor.RED + "FRIENDS >> You don't have any friends yet.");

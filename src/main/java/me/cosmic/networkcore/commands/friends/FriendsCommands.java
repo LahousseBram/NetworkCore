@@ -140,7 +140,7 @@ public class FriendsCommands implements CommandExecutor {
                 player.sendMessage(ChatColor.LIGHT_PURPLE + "FRIENDS >> Your friends list:");
                 player.sendMessage(ChatColor.DARK_GRAY + "----------------------------------------------");
                 for (String friend : f)
-                    player.sendMessage(ChatColor.YELLOW + Bukkit.getPlayer(friend).getName());
+                    player.sendMessage(ChatColor.YELLOW + friend);
                 player.sendMessage(ChatColor.DARK_GRAY + "----------------------------------------------");
                 player.sendMessage("");
             }

@@ -138,7 +138,6 @@ public class Players {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        Bukkit.broadcastMessage(Arrays.toString(names.toArray()));
         return names;
     }
 

@@ -8,3 +8,6 @@ commands:
       - f
   executequery:
     description: executes a query on the networkcore database
+  party:
+    aliases:
+      - p

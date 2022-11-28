@@ -4,6 +4,7 @@ import java.util.List;
 
 import me.cosmic.networkcore.NetworkCore;
 import me.cosmic.networkcore.managers.PartyManager;
+import me.cosmic.networkcore.sql.Parties;
 import me.cosmic.networkcore.systems.Party;
 import me.cosmic.networkcore.systems.PartyInvite;
 import org.bukkit.Bukkit;
@@ -34,28 +35,29 @@ public class PartyCommands implements CommandExecutor {
         } catch (Exception e) {
             player.sendMessage(ChatColor.RED + "That player either doesn't exist or isn't online at the moment. Please try again and check your spelling.");
         }
+
+        Parties pa = new Parties(this.core);
+
         if (args[0].equalsIgnoreCase("invite")) {
-            boolean exists = false;
-            for (Party p : parties) {
-                if (p.getLeader() == player.getUniqueId() || p.getMembers().contains(player.getUniqueId())) {
-                    exists = true;
-                    break;
-                }
-            }
-            if (!exists && target != null) {
+            if (target != null) {
                 target.sendMessage(ChatColor.LIGHT_PURPLE + "You have received a party invite from " + ChatColor.YELLOW + player.getName() + ChatColor.LIGHT_PURPLE + ", type " + ChatColor.GREEN + "/p accept " + ChatColor.LIGHT_PURPLE + "to accept the party invite.");
+                player.sendMessage(ChatColor.LIGHT_PURPLE + "You have sent a party invite to " + ChatColor.YELLOW + target.getName());
                 final PartyInvite invite = pm.createInvite(player.getUniqueId(), target.getUniqueId());
                 final Player finalTarget = target;
                 (new BukkitRunnable() {
                     public void run() {
                         pm.removeInvite(invite);
-                        try {
-                            finalTarget.sendMessage(ChatColor.LIGHT_PURPLE + "The invite from " + ChatColor.YELLOW + player.getName() + ChatColor.LIGHT_PURPLE + " has expired.");
-                        } catch (Exception exception) {}
+                        finalTarget.sendMessage(ChatColor.LIGHT_PURPLE + "The invite from " + ChatColor.YELLOW + player.getName() + ChatColor.LIGHT_PURPLE + " has expired.");
                     }
                 }).runTaskLater((Plugin)this.core, 1200L);
-            } else {
-                player.sendMessage(ChatColor.RED + "You're already in a party, please leave your current one and try again.");
+            }
+        } else if (args[0].equalsIgnoreCase("accept")) {
+            for (PartyInvite invite : pm.getInvites()) {
+                if (invite.getReceiver() == player.getUniqueId() && invite.getSender() == player.getUniqueId()) {
+                    pa.createParty(player, target);
+
+                    return true;
+                }
             }
         }
         return false;

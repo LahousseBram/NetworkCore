@@ -17,7 +17,7 @@ import org.bukkit.entity.Player;
 public class FriendsCommands implements CommandExecutor {
 
     //TODO
-    // - Make sure that the plugin doesn't throw an error when the target isn't online.
+    // - Nothing here ATM!
 
     private NetworkCore networkcore;
 
@@ -42,6 +42,11 @@ public class FriendsCommands implements CommandExecutor {
                     target = Bukkit.getPlayer(args[1]);
                 } catch (Exception e) {
                     player.sendMessage(ChatColor.RED + "That player either doesn't exist or isn't online at the moment. Please try again and check your spelling.");
+                    return true;
+                }
+
+                if (!target.isOnline()) {
+                    player.sendMessage(ChatColor.RED + "Friends >> The player you're trying to send a friend request to seems to be offline and can't be reached. Make sure you're both online and try again.");
                     return true;
                 }
                 if (!pl.areTheyFriends(player, target) && !pl.existsFriendRequest(player, target)) {

@@ -49,16 +49,18 @@ public class PartyCommands implements CommandExecutor {
                         pm.removeInvite(invite);
                         finalTarget.sendMessage(ChatColor.LIGHT_PURPLE + "The invite from " + ChatColor.YELLOW + player.getName() + ChatColor.LIGHT_PURPLE + " has expired.");
                     }
-                }).runTaskLater((Plugin)this.core, 1200L);
+                }).runTaskLater(this.core, 1200L);
             }
         } else if (args[0].equalsIgnoreCase("accept")) {
             for (PartyInvite invite : pm.getInvites()) {
                 if (invite.getReceiver() == player.getUniqueId() && invite.getSender() == player.getUniqueId()) {
+                    pm.getInvites().remove(invite);
                     pa.createParty(player, target);
-
                     return true;
                 }
             }
+        } else if (args[0].equalsIgnoreCase("disband")) {
+
         }
         return false;
     }

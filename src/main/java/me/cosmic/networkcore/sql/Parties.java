@@ -5,6 +5,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
+import java.io.PrintStream;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -43,6 +44,19 @@ public class Parties {
             ps2.setInt(1, partyID);
             ps2.setString(2, player.getUniqueId().toString());
             ps2.executeUpdate();
+
+            PreparedStatement ps3 = this.networkCore.mySQL.getConnection().prepareStatement("select * from players where PartyID=?");
+            ps3.setInt(1, partyID);
+            ResultSet r3 = ps3.executeQuery();
+            while (r3.next()) {
+                try {
+                    Player partyMember = Bukkit.getPlayer(UUID.fromString(r3.getString("UUID")));
+                    partyMember.sendMessage(ChatColor.YELLOW + target.getName() + ChatColor.LIGHT_PURPLE + "was added to the party.");
+                } catch (Exception ignored) {
+                    // a player from the party isn't online, so it'll throw an error.
+                    ignored.printStackTrace();
+                }
+            }
         } catch (SQLException e) {
             player.sendMessage(ChatColor.RED + "Something went wrong there. Please try again later or contact an administrator.");
         }
@@ -95,6 +109,25 @@ public class Parties {
             e.printStackTrace();
         }
         return new ArrayList<>();
+    }
+
+    public void disbandParty(Player player) {
+        try {
+
+            PreparedStatement partyStatement = this.networkCore.mySQL.getConnection().prepareStatement("select * from players where UUID=?");
+            partyStatement.setString(1, player.getUniqueId().toString());
+            ResultSet rs = partyStatement.executeQuery();
+            int partyID = -1;
+
+            if (rs.next()) {
+                partyID = rs.getInt("");
+            }
+
+            PreparedStatement ps = this.networkCore.mySQL.getConnection().prepareStatement("update players set PartyID=? where PartyID=?");
+            ps.setInt(1, -1);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
 }

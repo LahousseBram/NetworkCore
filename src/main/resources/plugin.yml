@@ -6,3 +6,5 @@ commands:
   friend:
     aliases:
       - f
+  executequery:
+    description: executes a query on the networkcore database

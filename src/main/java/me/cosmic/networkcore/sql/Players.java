@@ -133,7 +133,7 @@ public class Players {
             ps.setString(1, player.getUniqueId().toString());
             ResultSet resultSet = ps.executeQuery();
             while (resultSet.next()) {
-                names.add(Bukkit.getPlayer(UUID.fromString(resultSet.getString("FriendsWith"))).getName());
+                names.add(Bukkit.getOfflinePlayer(UUID.fromString(resultSet.getString("FriendsWith"))).getName());
             }
         } catch (SQLException e) {
             e.printStackTrace();
